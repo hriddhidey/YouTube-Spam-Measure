@@ -43,12 +43,29 @@ for i in videos_list_response['items']:
     temp_res.update(i['statistics'])
     res.append(temp_res)
 
-#for item in res:
-   # print item,'\n'
+#df = pd.DataFrame.from_dict(res)
+#print df.head(10),'\n'
+#print df.describe(),'\n'
+#print df['likeCount'].mean()
+#print df
 
-df = pd.DataFrame.from_dict(res)
-print df.head(10),'\n'
-print df.describe(),'\n'
-print df['likeCount'].mean()
 
-#df.boxplot(column = 'likeCount')
+f = open("data.txt","w")
+headers = " ".ljust(3)+"Title".ljust(100)+"Views".ljust(15)+"Likes".ljust(15)+"Dislikes".ljust(15)+"Comments".ljust(15)
+f.write(headers)
+f.write('\n')
+for i in range(len(res)-1):
+    entry = str(i+1).ljust(3)
+    name = str(res[i]['v_title'].split()).encode('ascii').replace("u'","").replace("'","")
+    name = ''.join(name).replace(",","")
+    name = name[1:len(name)-1]
+    entry+=name.ljust(100)
+    entry+=str(res[i]['viewCount']).ljust(15)
+    entry+=str(res[i]['likeCount']).ljust(15)
+    entry+=str(res[i]['dislikeCount']).ljust(15)
+    entry+=str(res[i]['commentCount']).ljust(15)
+    f.write(entry)
+    f.write('\n')
+#i+=1
+f.flush();
+f.close();
